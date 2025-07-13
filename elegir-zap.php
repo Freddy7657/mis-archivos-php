@@ -58,7 +58,7 @@ $zap = $_GET['zap'] ?? '';
 
     <h2>Estás a punto de activar el ZAP <strong><?php echo htmlspecialchars($zap); ?></strong></h2>
 
-    <form action="crear-sitio.php" method="POST">
+<form action="crear-sitio.php" method="GET">
         <input type="hidden" name="zap" value="<?php echo htmlspecialchars($zap); ?>">
         
         <label>Elige tu subdominio:</label><br>
@@ -68,4 +68,3 @@ $zap = $_GET['zap'] ?? '';
     </form>
 
 </body>
-</html>
