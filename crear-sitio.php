@@ -22,6 +22,7 @@ $headers = [
     "Accept: application/json",
     "User-Agent: ZedlixCloner/1.0"
 ];
+
 $data = [
     "destinationName" => $subdominio,
     "domainName" => $domain,
@@ -29,18 +30,24 @@ $data = [
     "cloneExistingDatabase" => true
 ];
 
+$payload = json_encode($data, JSON_UNESCAPED_SLASHES);
+
 $ch = curl_init($url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 $response = curl_exec($ch);
 $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+$error = curl_error($ch);
 curl_close($ch);
 
 if ($httpCode === 200 || $httpCode === 201) {
     echo "Sitio clonado con éxito. Redirigiendo a https://$domain ...";
     header("refresh:5;url=https://$domain");
 } else {
-    echo "Error al clonar sitio en RunCloud: $response";
+    echo "<pre>Error al clonar sitio en RunCloud:\n";
+    echo "HTTP Code: $httpCode\n";
+    echo "cURL Error: $error\n";
+    echo "Respuesta: $response</pre>";
 }
